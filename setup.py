@@ -90,7 +90,7 @@ script_name = "bin/pip.exe" if sys.platform == "win32" else "bin/pip"
 
 setup(
     name="pip-uv",
-    version="0.1.0",
+    version="0.1.1",
     # We declare the compiled binary as a "script" so pip installs it to bin/
     scripts=[script_name],
     cmdclass=cmdclass,
