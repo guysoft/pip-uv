@@ -10,6 +10,12 @@ try:
 except ImportError:
     from distutils.command.build_scripts import build_scripts
 
+# Try to import bdist_wheel for custom tagging
+try:
+    from wheel.bdist_wheel import bdist_wheel
+except ImportError:
+    bdist_wheel = None
+
 def build_go_binary():
     """Compiles the Go binary."""
     output_dir = "bin"
@@ -65,6 +71,20 @@ class CustomBuildScripts(build_scripts):
         build_go_binary()
         super().run()
 
+cmdclass = {
+    'build_scripts': CustomBuildScripts,
+}
+
+if bdist_wheel:
+    class CustomBdistWheel(bdist_wheel):
+        def get_tag(self):
+            python, abi, plat = super().get_tag()
+            # Use py3-none-plat so the wheel is installable on any Python 3 version
+            # but retains the platform tag (e.g. manylinux_x86_64)
+            return 'py3', 'none', plat
+            
+    cmdclass['bdist_wheel'] = CustomBdistWheel
+
 # Determine the script name dynamically based on platform
 script_name = "bin/pip.exe" if sys.platform == "win32" else "bin/pip"
 
@@ -73,7 +93,5 @@ setup(
     version="0.1.0",
     # We declare the compiled binary as a "script" so pip installs it to bin/
     scripts=[script_name],
-    cmdclass={
-        'build_scripts': CustomBuildScripts,
-    },
+    cmdclass=cmdclass,
 )
