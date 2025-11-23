@@ -21,4 +21,4 @@ classifiers = [
 dependencies = []
 
 [project.urls]
-Homepage = "https://github.com/yourusername/uv-pip-shim"
+Homepage = "https://github.com/guysoft/uv-pip-shim"

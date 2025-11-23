@@ -10,7 +10,7 @@ This project uses GitHub Actions to automatically build and publish wheels to Py
     *   Go to your project on PyPI (or create it).
     *   Go to **Settings** > **Publishing**.
     *   Add a new **GitHub** publisher.
-    *   **Owner**: `yourusername` (replace with your GitHub username).
+    *   **Owner**: `guysoft` (replace with your GitHub username).
     *   **Repository**: `pip-uv` (or whatever you named the repo).
     *   **Workflow name**: `release.yml`.
     *   **Environment**: Leave empty or use `pypi` if you configured it.
