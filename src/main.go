@@ -55,12 +55,12 @@ func resolveCommand(args []string, fs FileSystem) (CommandResult, error) {
 	// 1. Command must be 'install'
 	// 2. We must be in a uv-managed project environment (detected via pyvenv.cfg and uv.lock/pyproject.toml)
 	// 3. Arguments must be simple packages (no flags starting with -)
-	
+
 	if len(cmdArgs) > 0 && cmdArgs[0] == "install" && len(cmdArgs) > 1 {
 		exe, err := fs.Executable()
 		if err == nil {
 			exe, _ = fs.EvalSymlinks(exe)
-			
+
 			// Layout: /path/to/project/.venv/bin/pip
 			venvBin := filepath.Dir(exe)
 			venvRoot := filepath.Dir(venvBin)
@@ -79,7 +79,7 @@ func resolveCommand(args []string, fs FileSystem) (CommandResult, error) {
 			if _, err := fs.Stat(filepath.Join(candidateProjectRoot, "uv.lock")); err == nil {
 				hasLock = true
 			} else if _, err := fs.Stat(filepath.Join(candidateProjectRoot, "pyproject.toml")); err == nil {
-				hasLock = true 
+				hasLock = true
 			}
 
 			if hasUvInCfg && hasLock {
