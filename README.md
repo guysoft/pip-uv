@@ -52,4 +52,4 @@ If you prefer to build and copy the binary manually:
 
 ## License
 
-MIT
+ GPL-3.0 license 
