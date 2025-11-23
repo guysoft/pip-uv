@@ -1,0 +1,7 @@
+bin/
+pip
+dist/
+*.exe
+*.o
+.DS_Store
+

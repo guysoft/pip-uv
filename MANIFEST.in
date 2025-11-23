@@ -1,0 +1,6 @@
+include src/main.go
+include go.mod
+include Makefile
+include LICENSE
+include README.md
+
