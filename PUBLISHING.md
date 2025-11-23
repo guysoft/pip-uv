@@ -17,29 +17,27 @@ This project uses GitHub Actions to automatically build and publish wheels to Py
 
 ## How to Release
 
-1.  **Update Version**:
-    Edit `pyproject.toml` (and `setup.py` if version is hardcoded there) to the new version number (e.g., `0.1.0`).
+We have included a helper script `release_script.py` to automate the version bump and tagging process.
 
-    ```toml
-    [project]
-    version = "0.1.0"
-    ```
-
-2.  **Commit and Push**:
+1.  **Run the Release Script**:
     ```bash
-    git add .
-    git commit -m "Bump version to 0.1.0"
-    git push
+    ./release_script.py [patch|minor|major]
     ```
+    Default is `patch`.
 
-3.  **Tag the Release**:
-    Create a tag starting with `v`.
+    Example:
     ```bash
-    git tag v0.1.0
-    git push origin v0.1.0
+    ./release_script.py patch  # 0.1.0 -> 0.1.1
+    ./release_script.py minor  # 0.1.0 -> 0.2.0
     ```
 
-4.  **Watch the Build**:
+    This script will:
+    *   Bump the version in `pyproject.toml` (and `setup.py`).
+    *   Commit the changes.
+    *   Create a git tag (e.g., `v0.1.1`).
+    *   Push the commit and tag to GitHub.
+
+2.  **Watch the Build**:
     Go to the "Actions" tab in your GitHub repository. You should see the "Build and Publish" workflow running.
     
     It will:
@@ -47,11 +45,18 @@ This project uses GitHub Actions to automatically build and publish wheels to Py
     *   Build the source distribution.
     *   Upload everything to PyPI.
 
-## Manual Publishing (Optional)
+## Manual Release (Without Script)
 
-If you want to publish manually from your machine:
-
-1.  Install build tools: `pip install build twine`
-2.  Build: `python -m build`
-3.  Upload: `twine upload dist/*`
-
+1.  **Update Version**:
+    Edit `pyproject.toml`.
+2.  **Commit and Push**:
+    ```bash
+    git add .
+    git commit -m "Bump version"
+    git push
+    ```
+3.  **Tag**:
+    ```bash
+    git tag v0.1.1
+    git push origin v0.1.1
+    ```

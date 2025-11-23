@@ -17,6 +17,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # For Linux ARM64, we need QEMU. MUST be before cibuildwheel.
+      - name: Set up QEMU
+        if: runner.os == 'Linux'
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: all
+
       - uses: actions/setup-go@v5
         with:
           go-version: '1.22'
@@ -32,26 +39,21 @@ jobs:
       - name: Build wheels
         run: python -m cibuildwheel --output-dir wheelhouse
         env:
-          # Install Go in the Linux container
-          CIBW_BEFORE_ALL_LINUX: "curl -L https://go.dev/dl/go1.22.1.linux-amd64.tar.gz | tar -C /usr/local -xz && ln -s /usr/local/go/bin/go /usr/local/bin/go"
+          # Install Go in the Linux container (Dynamic Arch)
+          CIBW_BEFORE_ALL_LINUX: >
+            ARCH=$(uname -m) &&
+            if [ "$ARCH" = "x86_64" ]; then GO_ARCH="amd64"; elif [ "$ARCH" = "aarch64" ]; then GO_ARCH="arm64"; else echo "Unsupported arch: $ARCH"; exit 1; fi &&
+            curl -L "https://go.dev/dl/go1.22.1.linux-${GO_ARCH}.tar.gz" | tar -C /usr/local -xz &&
+            ln -s /usr/local/go/bin/go /usr/local/bin/go
+          
           # Skip PyPy and 32-bit builds to save time (unless needed)
           CIBW_SKIP: "pp* *-win32 *-manylinux_i686"
-          # We only need one python version to build the wheel since the binary is independent of Python ABI
-          # But cibuildwheel usually builds for all. 
-          # Since our setup.py doesn't use C extensions linked to Python, 
-          # we produce a wheel that is technically "py3-none-PLATFORM".
-          # However, setup.py with 'scripts' or 'data' might result in generic wheels.
-          # Let's just let it build for a few standard versions.
+          
+          # Build using cp312. Since we force platform tags, this produces proper wheels.
           CIBW_BUILD: "cp312-*" 
+          
           CIBW_ARCHS_MACOS: "x86_64 arm64"
           CIBW_ARCHS_LINUX: "auto aarch64"
-
-      # For Linux ARM64, we need QEMU
-      - name: Set up QEMU
-        if: runner.os == 'Linux'
-        uses: docker/setup-qemu-action@v3
-        with:
-          platforms: all
 
       - uses: actions/upload-artifact@v4
         with:
@@ -87,4 +89,3 @@ jobs:
           merge-multiple: true
 
       - uses: pypa/gh-action-pypi-publish@release/v1
-
