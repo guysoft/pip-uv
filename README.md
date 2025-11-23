@@ -27,25 +27,40 @@ pip install requests
 # 🎉 Actually runs: uv pip install requests
 ```
 
+## ✨ Smart Features
+
+**Auto-switch to `uv add`**: 
+If you are in a project managed by `uv` (with a `uv.lock`), `pip-uv` is smart enough to detect it. 
+
+If you run:
+```bash
+pip install requests
+```
+It will automatically switch to:
+```bash
+uv add requests
+```
+...ensuring your `pyproject.toml` stays in sync! (Only triggers for simple installs without flags).
+
 ## How it works
 
 When you install `pip-uv`, it places a small, optimized binary named `pip` into your virtual environment's `bin` folder. This binary shadows the standard python `pip`.
 
 1.  You type `pip install ...`
 2.  The shim intercepts the call.
-3.  It instantly replaces itself with `uv pip install ...`
-4.  You enjoy pure speed.
+3.  It checks if you are in a `uv` project.
+4.  It instantly replaces itself with `uv pip install ...` (or `uv add ...`).
+5.  You enjoy pure speed.
 
 ## Features
 
 *   **Zero Overhead**: Written in Go, the shim uses `syscall.Exec` to replace the process. No python startup cost.
 *   **Transparent**: Passes all arguments and flags directly to `uv`.
-*   **Pre-compiled**: Installs instantly on Linux, macOS, and Windows (no Go compiler needed for standard platforms!).
+*   **Pre-compiled**: Installs instantly on Linux, macOS, and Windows.
 
 ## Prerequisites
 
 *   [**uv**](https://github.com/astral-sh/uv) must be installed and available in your system `PATH`.
-    *   *If `uv` isn't found, the shim will complain and exit.*
 
 ## License
 
