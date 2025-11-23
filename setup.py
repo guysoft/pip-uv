@@ -1,7 +1,7 @@
 import os
 import sys
 import subprocess
-from setuptools import setup
+from setuptools import setup, Distribution
 from distutils.util import convert_path
 
 # Try to import build_scripts from setuptools, fallback to distutils
@@ -77,6 +77,11 @@ cmdclass = {
 
 if bdist_wheel:
     class CustomBdistWheel(bdist_wheel):
+        def finalize_options(self):
+            super().finalize_options()
+            # Mark as not pure python so we get platform specific wheels
+            self.root_is_pure = False
+
         def get_tag(self):
             python, abi, plat = super().get_tag()
             # Use py3-none-plat so the wheel is installable on any Python 3 version
@@ -85,13 +90,19 @@ if bdist_wheel:
             
     cmdclass['bdist_wheel'] = CustomBdistWheel
 
+class BinaryDistribution(Distribution):
+    """Distribution which always forces a binary package with platform name"""
+    def has_ext_modules(self):
+        return True
+
 # Determine the script name dynamically based on platform
 script_name = "bin/pip.exe" if sys.platform == "win32" else "bin/pip"
 
 setup(
     name="pip-uv",
-    version="0.1.1",
+    version="0.1.2",
     # We declare the compiled binary as a "script" so pip installs it to bin/
     scripts=[script_name],
+    distclass=BinaryDistribution,
     cmdclass=cmdclass,
 )
