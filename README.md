@@ -64,4 +64,4 @@ When you install `pip-uv`, it places a small, optimized binary named `pip` into 
 
 ## License
 
-MIT
+GPL-3.0
