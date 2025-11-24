@@ -4,13 +4,13 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pip-uv"
-version = "0.1.13"
+version = "0.1.14"
 description = "A seamless shim to redirect pip commands to uv"
 readme = "README.md"
 requires-python = ">=3.8"
 license = "GPL-3.0-or-later"
 authors = [
-    {name = "Your Name", email = "your.email@example.com"}
+    {name = "Guy Sheffer", email = "guysoft@gmail.com"}
 ]
 classifiers = [
     "Programming Language :: Go",
@@ -22,3 +22,5 @@ dependencies = []
 
 [project.urls]
 Homepage = "https://github.com/guysoft/pip-uv"
+Repository = "https://github.com/guysoft/pip-uv"
+Issues = "https://github.com/guysoft/pip-uv/issues"
