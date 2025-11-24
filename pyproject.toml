@@ -4,11 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pip-uv"
-version = "0.1.11"
-description = "Forces 'pip' commands to run via 'uv pip' transparently."
+version = "0.1.12"
+description = "A seamless shim to redirect pip commands to uv"
 readme = "README.md"
 requires-python = ">=3.8"
-license = "MIT"
+license = "GPL-3.0-or-later"
 authors = [
     {name = "Your Name", email = "your.email@example.com"}
 ]
@@ -21,4 +21,4 @@ classifiers = [
 dependencies = []
 
 [project.urls]
-Homepage = "https://github.com/guysoft/uv-pip"
+Homepage = "https://github.com/guysoft/pip-uv"
